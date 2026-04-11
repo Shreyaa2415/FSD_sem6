@@ -1,0 +1,33 @@
+<div class="admin-layout">
+  <aside class="sidebar admin-card">
+    <div class="brand">
+      <div class="brand-logo">SO</div>
+      <div class="brand-text">Administrator</div>
+    </div>
+
+    <nav class="menu">
+      <a
+        *ngFor="let item of menuItems"
+        class="menu-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+      >
+        <span class="dot"></span>
+        <span>{{ item.label }}</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <header class="top-banner admin-card">
+      <div class="college">{{ collegeName }}</div>
+      <h1>{{ sectionTitle }}</h1>
+    </header>
+
+    <section class="page-content admin-card">
+      <ng-content></ng-content>
+    </section>
+  </main>
+</div>
+

@@ -1,0 +1,91 @@
+<section class="feature-wrap">
+  <div class="feature-toolbar">
+    <div class="toolbar-group">
+      <input
+        class="admin-field"
+        type="text"
+        placeholder="Section for new class"
+        [(ngModel)]="addSection"
+      />
+      <select class="admin-field" [(ngModel)]="addDeptId">
+        <option [ngValue]="null">Select Department</option>
+        <option *ngFor="let dept of departments" [ngValue]="dept.deptId">
+          {{ dept.deptName }} ({{ dept.deptId }})
+        </option>
+      </select>
+      <button class="admin-btn admin-btn-primary" type="button" (click)="addClass()">Add Class</button>
+    </div>
+
+    <div class="toolbar-group">
+      <input
+        class="admin-field"
+        type="number"
+        placeholder="Class Id"
+        [(ngModel)]="updateClassId"
+      />
+      <input
+        class="admin-field"
+        type="text"
+        placeholder="Updated section"
+        [(ngModel)]="updateSection"
+      />
+      <select class="admin-field" [(ngModel)]="updateDeptId">
+        <option [ngValue]="null">Updated Department</option>
+        <option *ngFor="let dept of departments" [ngValue]="dept.deptId">
+          {{ dept.deptName }} ({{ dept.deptId }})
+        </option>
+      </select>
+      <button class="admin-btn" type="button" (click)="updateClass()">Update Class</button>
+    </div>
+
+    <div class="toolbar-group">
+      <input
+        class="admin-field"
+        type="number"
+        placeholder="Class Id"
+        [(ngModel)]="searchClassId"
+      />
+      <button class="admin-btn" type="button" (click)="getClassById()">Get By Id</button>
+      <button class="admin-btn" type="button" (click)="fetchAllClasses()">Refresh</button>
+    </div>
+  </div>
+
+  <p class="status ok" *ngIf="successMessage">{{ successMessage }}</p>
+  <p class="status err" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <article class="admin-card selected-card" *ngIf="selectedClass">
+    <h3>Selected Class</h3>
+    <p><strong>Id:</strong> {{ selectedClass.classId }}</p>
+    <p><strong>Section:</strong> {{ selectedClass.section }}</p>
+    <p><strong>Department:</strong> {{ selectedClass.department?.deptName || 'N/A' }}</p>
+  </article>
+
+  <div class="admin-card table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Class Id</th>
+          <th>Section</th>
+          <th>Department Id</th>
+          <th>Department Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cls of classes">
+          <td>{{ cls.classId }}</td>
+          <td>{{ cls.section }}</td>
+          <td>{{ cls.department?.deptId || '-' }}</td>
+          <td>{{ cls.department?.deptName || '-' }}</td>
+          <td>
+            <button class="admin-btn danger" type="button" (click)="deleteClass(cls.classId)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="!loading && classes.length === 0">
+          <td colspan="5">No classes found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+

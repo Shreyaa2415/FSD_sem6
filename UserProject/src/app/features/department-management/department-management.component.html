@@ -1,0 +1,62 @@
+<section class="feature-wrap">
+  <div class="feature-toolbar">
+    <div class="toolbar-group">
+      <input
+        class="admin-field"
+        type="text"
+        placeholder="Department name"
+        [(ngModel)]="newDeptName"
+      />
+      <button class="admin-btn admin-btn-primary" type="button" (click)="addDepartment()">
+        Add Department
+      </button>
+    </div>
+
+    <div class="toolbar-group">
+      <input
+        class="admin-field"
+        type="number"
+        placeholder="Department Id"
+        [(ngModel)]="searchDeptId"
+      />
+      <button class="admin-btn" type="button" (click)="getDepartmentById()">Get By Id</button>
+      <button class="admin-btn" type="button" (click)="fetchAllDepartments()">Refresh</button>
+    </div>
+  </div>
+
+  <p class="status ok" *ngIf="successMessage">{{ successMessage }}</p>
+  <p class="status err" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <article class="admin-card selected-card" *ngIf="selectedDepartment">
+    <h3>Selected Department</h3>
+    <p><strong>Id:</strong> {{ selectedDepartment.deptId }}</p>
+    <p><strong>Name:</strong> {{ selectedDepartment.deptName }}</p>
+  </article>
+
+  <div class="admin-card table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Department Id</th>
+          <th>Department Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dept of departments">
+          <td>{{ dept.deptId }}</td>
+          <td>{{ dept.deptName }}</td>
+          <td>
+            <button class="admin-btn danger" type="button" (click)="deleteDepartment(dept.deptId)">
+              Delete
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="!loading && departments.length === 0">
+          <td colspan="3">No departments found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+

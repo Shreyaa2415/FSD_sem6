@@ -1,0 +1,77 @@
+.dashboard-wrap {
+  padding: 22px;
+  display: grid;
+  gap: 20px;
+  background: #f5f6f8;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.kpi-card {
+  min-height: 128px;
+  display: grid;
+  place-items: center;
+}
+
+.kpi-card h3 {
+  color: #56606b;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.kpi-card p {
+  color: var(--admin-teal-700);
+  font-size: 47px;
+  font-weight: 700;
+}
+
+.table-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-head h2 {
+  font-size: 35px;
+  color: #535d67;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.status.err {
+  background: #fdecec;
+  color: #b42b2b;
+  border: 1px solid #f6c2c2;
+  padding: 8px 10px;
+  border-radius: 2px;
+}
+
+@media (max-width: 1200px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .dashboard-wrap {
+    padding: 14px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .table-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

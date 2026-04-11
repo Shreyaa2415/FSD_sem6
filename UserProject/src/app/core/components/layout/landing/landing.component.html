@@ -1,0 +1,44 @@
+<section class="dashboard-wrap">
+  <div class="kpi-grid">
+    <article class="admin-card kpi-card">
+      <h3>Total Classes</h3>
+      <p>{{ classes.length }}</p>
+    </article>
+    <article class="admin-card kpi-card">
+      <h3>Total Departments</h3>
+      <p>{{ departments.length }}</p>
+    </article>
+  </div>
+
+  <div class="table-head">
+    <h2>Latest Classes</h2>
+    <div class="actions">
+      <button type="button" class="admin-btn" routerLink="/class">Manage Class</button>
+      <button type="button" class="admin-btn admin-btn-primary" routerLink="/department">
+        Manage Department
+      </button>
+    </div>
+  </div>
+
+  <p class="status err" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Class Id</th>
+        <th>Section</th>
+        <th>Department</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cls of classes | slice:0:8">
+        <td>{{ cls.classId }}</td>
+        <td>{{ cls.section }}</td>
+        <td>{{ cls.department?.deptName || '-' }}</td>
+      </tr>
+      <tr *ngIf="!loading && classes.length === 0">
+        <td colspan="3">No classes found.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
