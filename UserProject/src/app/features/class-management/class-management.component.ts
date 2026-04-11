@@ -5,6 +5,7 @@ import {
   ClassEntity,
   ClassCreateRequest,
   ClassUpdateRequest,
+  ClassroomType,
 } from '../../models/class.model';
 import { ClassService } from '../../services/class.service';
 import { Department } from '../../models/department.model';
@@ -23,16 +24,23 @@ export class ClassManagementComponent implements OnInit {
 
   addSection = '';
   addDeptId: number | null = null;
+  addCapacity: number | null = null;
+  addArea: number | null = null;
+  addClassroomType: ClassroomType | null = null;
 
   updateClassId: number | null = null;
   updateSection = '';
   updateDeptId: number | null = null;
+  updateCapacity: number | null = null;
+  updateArea: number | null = null;
+  updateClassroomType: ClassroomType | null = null;
 
   searchClassId: number | null = null;
 
   loading = false;
   successMessage = '';
   errorMessage = '';
+  readonly classroomTypes: ClassroomType[] = ['CLASS', 'LAB', 'COMMON_ROOM'];
 
   constructor(
     private readonly classService: ClassService,
@@ -74,14 +82,28 @@ export class ClassManagementComponent implements OnInit {
   }
 
   addClass(): void {
-    if (!this.addSection.trim() || this.addDeptId == null) {
-      this.errorMessage = 'Section and department are required for add.';
+    if (
+      !this.addSection.trim() ||
+      this.addDeptId == null ||
+      this.addCapacity == null ||
+      this.addArea == null ||
+      this.addClassroomType == null
+    ) {
+      this.errorMessage =
+        'Section, department, capacity, area, and classroom type are required.';
+      return;
+    }
+    if (this.addCapacity <= 0 || this.addArea <= 0) {
+      this.errorMessage = 'Capacity and area must be greater than 0.';
       return;
     }
 
     const payload: ClassCreateRequest = {
       section: this.addSection.trim(),
       department: { deptId: this.addDeptId },
+      capacity: this.addCapacity,
+      area: this.addArea,
+      classroomType: this.addClassroomType,
     };
 
     this.loading = true;
@@ -92,6 +114,9 @@ export class ClassManagementComponent implements OnInit {
         this.successMessage = 'Class added successfully.';
         this.addSection = '';
         this.addDeptId = null;
+        this.addCapacity = null;
+        this.addArea = null;
+        this.addClassroomType = null;
         this.fetchAllClasses();
       },
       error: (error: HttpErrorResponse) => {
@@ -102,16 +127,44 @@ export class ClassManagementComponent implements OnInit {
   }
 
   updateClass(): void {
-    if (this.updateClassId == null || !this.updateSection.trim()) {
-      this.errorMessage = 'Class id and section are required for update.';
+    if (this.updateClassId == null) {
+      this.errorMessage = 'Class id is required for update.';
       return;
     }
 
-    const payload: ClassUpdateRequest = {
-      section: this.updateSection.trim(),
-    };
+    const payload: ClassUpdateRequest = {};
+    if (this.updateSection.trim()) {
+      payload.section = this.updateSection.trim();
+    }
     if (this.updateDeptId != null) {
       payload.department = { deptId: this.updateDeptId };
+    }
+    if (this.updateCapacity != null) {
+      payload.capacity = this.updateCapacity;
+    }
+    if (this.updateArea != null) {
+      payload.area = this.updateArea;
+    }
+    if (this.updateClassroomType != null) {
+      payload.classroomType = this.updateClassroomType;
+    }
+
+    if (
+      (payload.capacity != null && payload.capacity <= 0) ||
+      (payload.area != null && payload.area <= 0)
+    ) {
+      this.errorMessage = 'Updated capacity and area must be greater than 0.';
+      return;
+    }
+    if (
+      payload.section == null &&
+      payload.department == null &&
+      payload.capacity == null &&
+      payload.area == null &&
+      payload.classroomType == null
+    ) {
+      this.errorMessage = 'Provide at least one field to update.';
+      return;
     }
 
     this.loading = true;
@@ -122,6 +175,9 @@ export class ClassManagementComponent implements OnInit {
         this.successMessage = `Class ${this.updateClassId} updated successfully.`;
         this.updateSection = '';
         this.updateDeptId = null;
+        this.updateCapacity = null;
+        this.updateArea = null;
+        this.updateClassroomType = null;
         this.fetchAllClasses();
       },
       error: (error: HttpErrorResponse) => {

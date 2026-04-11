@@ -13,6 +13,27 @@
           {{ dept.deptName }} ({{ dept.deptId }})
         </option>
       </select>
+      <input
+        class="admin-field"
+        type="number"
+        placeholder="Capacity"
+        min="1"
+        [(ngModel)]="addCapacity"
+      />
+      <input
+        class="admin-field"
+        type="number"
+        placeholder="Area (sq.ft)"
+        min="0.01"
+        step="0.01"
+        [(ngModel)]="addArea"
+      />
+      <select class="admin-field" [(ngModel)]="addClassroomType">
+        <option [ngValue]="null">Select Type</option>
+        <option *ngFor="let type of classroomTypes" [ngValue]="type">
+          {{ type }}
+        </option>
+      </select>
       <button class="admin-btn admin-btn-primary" type="button" (click)="addClass()">Add Class</button>
     </div>
 
@@ -26,13 +47,34 @@
       <input
         class="admin-field"
         type="text"
-        placeholder="Updated section"
+        placeholder="Updated section (optional)"
         [(ngModel)]="updateSection"
       />
       <select class="admin-field" [(ngModel)]="updateDeptId">
         <option [ngValue]="null">Updated Department</option>
         <option *ngFor="let dept of departments" [ngValue]="dept.deptId">
           {{ dept.deptName }} ({{ dept.deptId }})
+        </option>
+      </select>
+      <input
+        class="admin-field"
+        type="number"
+        placeholder="Updated capacity"
+        min="1"
+        [(ngModel)]="updateCapacity"
+      />
+      <input
+        class="admin-field"
+        type="number"
+        placeholder="Updated area (sq.ft)"
+        min="0.01"
+        step="0.01"
+        [(ngModel)]="updateArea"
+      />
+      <select class="admin-field" [(ngModel)]="updateClassroomType">
+        <option [ngValue]="null">Updated Type</option>
+        <option *ngFor="let type of classroomTypes" [ngValue]="type">
+          {{ type }}
         </option>
       </select>
       <button class="admin-btn" type="button" (click)="updateClass()">Update Class</button>
@@ -57,6 +99,9 @@
     <h3>Selected Class</h3>
     <p><strong>Id:</strong> {{ selectedClass.classId }}</p>
     <p><strong>Section:</strong> {{ selectedClass.section }}</p>
+    <p><strong>Capacity:</strong> {{ selectedClass.capacity }}</p>
+    <p><strong>Area:</strong> {{ selectedClass.area }} sq.ft</p>
+    <p><strong>Type:</strong> {{ selectedClass.classroomType }}</p>
     <p><strong>Department:</strong> {{ selectedClass.department?.deptName || 'N/A' }}</p>
   </article>
 
@@ -68,6 +113,9 @@
           <th>Section</th>
           <th>Department Id</th>
           <th>Department Name</th>
+          <th>Capacity</th>
+          <th>Area (sq.ft)</th>
+          <th>Type</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -77,15 +125,17 @@
           <td>{{ cls.section }}</td>
           <td>{{ cls.department?.deptId || '-' }}</td>
           <td>{{ cls.department?.deptName || '-' }}</td>
+          <td>{{ cls.capacity }}</td>
+          <td>{{ cls.area }}</td>
+          <td>{{ cls.classroomType }}</td>
           <td>
             <button class="admin-btn danger" type="button" (click)="deleteClass(cls.classId)">Delete</button>
           </td>
         </tr>
         <tr *ngIf="!loading && classes.length === 0">
-          <td colspan="5">No classes found.</td>
+          <td colspan="8">No classes found.</td>
         </tr>
       </tbody>
     </table>
   </div>
 </section>
-
